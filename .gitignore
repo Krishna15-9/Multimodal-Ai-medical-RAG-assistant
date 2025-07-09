@@ -1,0 +1,45 @@
+
+# ============================================
+# ENVIRONMENT & SECRET FILES - NEVER COMMIT!
+# ============================================
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+.environment
+*.env
+med_env
+
+
+# API Keys and Secrets
+secrets.json
+secrets.yaml
+secrets.yml
+config/secrets.json
+config/secrets.yaml
+.secrets/
+api-keys.json
+credentials.json
+service-account.json
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Configuration files with sensitive data
+config.json
+config.yaml
+config.yml
+settings.json
+local_settings.py
+private_settings.py
+.env.example.local
+venv/
+README.md
+org/

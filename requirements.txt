@@ -1,0 +1,60 @@
+# Core Dependencies
+python-dotenv
+pydantic
+pydantic-settings
+
+# Data Retrieval
+requests
+xmltodict
+beautifulsoup4
+
+# LLM Integration
+
+
+# Vector Store and Embeddings
+chromadb
+sentence-transformers
+langchain
+langchain-community
+langchain-chroma
+
+# Document Processing
+pypdf
+python-docx
+markdown
+
+# Utilities
+tqdm
+numpy
+pandas
+
+# Logging and Monitoring
+loguru
+
+# Testing
+pytest
+pytest-asyncio
+pytest-cov
+
+# Development
+black
+isort
+flake8
+mypy
+
+# CLI Interface
+click
+rich
+
+# Streamlit UI
+streamlit
+streamlit-option-menu
+plotly
+
+# Authentication & Security
+streamlit-authenticator
+bcrypt
+pyjwt
+passlib
+
+euriai
