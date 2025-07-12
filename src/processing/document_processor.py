@@ -132,13 +132,16 @@ class DocumentProcessor:
                 logger.error("No content to ingest")
                 raise DocumentProcessingError("No content to ingest")
 
-            # Generate embeddings and add to vector store
-            embeddings = self.chroma_manager.embedding_model.encode(
-                chunks, 
-                convert_to_tensor=False
-            ).tolist()
-            
-            self.chroma_manager.add_documents(chunks, embeddings, metadatas)
+            # Combine chunks and metadatas into list of document dicts
+            documents_to_add = []
+            for content, metadata in zip(chunks, metadatas):
+                doc = {
+                    "full_text": content,
+                    **metadata
+                }
+                documents_to_add.append(doc)
+
+            self.chroma_manager.add_documents(documents_to_add)
             stats = self.chroma_manager.get_collection_stats()
 
             logger.info(f"Ingestion completed successfully: {stats}")

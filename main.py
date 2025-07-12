@@ -2,7 +2,7 @@
 """
 Healthcare Q&A Tool - Main Application
 
-A comprehensive healthcare Q&A tool for MediInsight Health Solutions
+A comprehensive healthcare Q&A tool 
 to research intermittent fasting and metabolic disorders.
 """
 
@@ -56,7 +56,7 @@ def setup_logging():
 @click.group()
 @click.version_option(version="1.0.0")
 def cli():
-    """Healthcare Q&A Tool for MediInsight Health Solutions."""
+    """Healthcare Q&A Tool ."""
     setup_logging()
     
     # Ensure data directory exists

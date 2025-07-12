@@ -2,7 +2,7 @@
 Healthcare Q&A Tool - Professional Streamlit Application
 
 An enterprise-grade, AI-powered healthcare research platform designed for
-MediInsight Health Solutions to analyze intermittent fasting and metabolic
+ to analyze intermittent fasting and metabolic
 disorder research through advanced RAG (Retrieval-Augmented Generation)
 architecture.
 
