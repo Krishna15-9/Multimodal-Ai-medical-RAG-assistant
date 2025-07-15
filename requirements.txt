@@ -58,3 +58,6 @@ pyjwt
 passlib
 
 euriai
+agno
+Pillow
+duckduckgo-search

@@ -40,5 +40,5 @@ settings.json
 local_settings.py
 private_settings.py
 .env.example.local
-venv/
+myenv/
 org/

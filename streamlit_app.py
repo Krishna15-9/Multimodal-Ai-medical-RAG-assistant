@@ -1,3 +1,4 @@
+
 """
 Healthcare Q&A Tool - Professional Streamlit Application
 
@@ -47,7 +48,7 @@ from src.vector_store import ChromaManager
 
 # Page configuration
 st.set_page_config(
-    page_title="Healthcare Q&A Tool",
+    page_title=" AI medical Health assistant",
     page_icon="🏥",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -183,7 +184,7 @@ def get_collection_stats():
 
 def login_page():
     """Display login page with RBAC authentication."""
-    st.markdown('<div class="main-header">🏥 Healthcare Q&A Tool - Login</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🏥  AI medical Health assistant - Login</div>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; color: #7f8c8d; font-size: 1.1rem;">Secure Access for Healthcare Professionals</p>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -247,15 +248,16 @@ def main():
     rbac = st.session_state.rbac_manager
 
     # Header with user info
-    st.markdown('<div class="main-header">🏥 Healthcare Q&A Tool</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🏥 AI medical Health assistant</div>', unsafe_allow_html=True)
 
     # User info bar
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
         st.markdown(f'<p style="color: #7f8c8d;">Welcome, <strong>{user.full_name}</strong> ({user.role.title()})</p>', unsafe_allow_html=True)
     with col2:
-        st.markdown(f'<p style="color: #7f8c8d; text-align: center;">{user.institution}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p style="color: #7f8c8d; text-align: center;"></p>', unsafe_allow_html=True)
     with col3:
+        # Remove "MediInsight Health Solutions" text next to logout button by only showing the button
         if st.button("🚪 Logout", use_container_width=True):
             st.session_state.auth_manager.logout_user(st.session_state.session_token)
             st.session_state.authenticated_user = None
@@ -285,6 +287,10 @@ def main():
     if rbac.has_feature_access(user, "system_settings"):
         nav_options.append("⚙️ Settings")
         nav_icons.append("gear")
+
+    # Add Medical Image Analysis section (no permission check as per user request)
+    nav_options.append("🖼️ Medical Image Analysis")
+    nav_icons.append("image")
 
     # Navigation menu
     if nav_options:
@@ -317,12 +323,14 @@ def main():
             analytics_page()
         elif selected == "⚙️ Settings" and rbac.has_feature_access(user, "system_settings"):
             settings_page()
+        elif selected == "🖼️ Medical Image Analysis":
+            medical_image_analysis_page()
     else:
         st.error("❌ No accessible features for your role. Please contact an administrator.")
 
 def research_and_ingest_page():
     """Research and document ingestion page."""
-    st.markdown('<div class="sub-header">📚 Research & Document Ingestion</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header"> Research & Document Ingestion</div>', unsafe_allow_html=True)
     
     # Sidebar for search parameters
     with st.sidebar:
@@ -504,7 +512,7 @@ def ingest_documents(search_term: str, max_results: int, reset_collection: bool,
 
 def ask_questions_page():
     """Q&A interface page."""
-    st.markdown('<div class="sub-header">💬 Ask Questions</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header"> Ask Questions</div>', unsafe_allow_html=True)
 
     # Check if collection has documents
     stats = get_collection_stats()
@@ -673,7 +681,7 @@ def display_qa_response(response: Dict, include_sources: bool):
 
 def analytics_page():
     """Analytics and insights page."""
-    st.markdown('<div class="sub-header">📊 Analytics & Insights</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header"> Analytics & Insights</div>', unsafe_allow_html=True)
 
     stats = get_collection_stats()
 
@@ -1008,6 +1016,73 @@ def startup_check():
         st.sidebar.error("❌ Configuration error")
         st.sidebar.error("Please check your .env file")
 
+import os
+from PIL import Image as PILImage
+from agno.agent import Agent
+from agno.models.google import Gemini
+from agno.tools.duckduckgo import DuckDuckGoTools
+from agno.media import Image as AgnoImage
+import streamlit as st
+
+# Set your API Key (Replace with your actual key or load from environment)
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyCUPYFW5ESk1YIwSjwpGd3jZJJ7oPAX4_s")
+os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
+
+# Initialize the Medical Agent once globally
+medical_agent = Agent(
+    model=Gemini(id="gemini-2.0-flash-exp"),
+    tools=[DuckDuckGoTools()],
+    markdown=True
+)
+
+# Medical Analysis Query defined once globally
+query = """
+You are a highly skilled medical imaging expert with extensive knowledge in radiology and diagnostic imaging. Analyze the medical image and structure your response as follows:
+
+### 1. Image Type & Region
+- Identify imaging modality (X-ray/MRI/CT/Ultrasound/etc.).
+- Specify anatomical region and positioning.
+- Evaluate image quality and technical adequacy.
+
+### 2. Key Findings
+- Highlight primary observations systematically.
+- Identify potential abnormalities with detailed descriptions.
+- Include measurements and densities where relevant.
+
+### 3. Diagnostic Assessment
+- Provide primary diagnosis with confidence level.
+- List differential diagnoses ranked by likelihood.
+- Support each diagnosis with observed evidence.
+- Highlight critical/urgent findings.
+
+### 4. Patient-Friendly Explanation
+- Simplify findings in clear, non-technical language.
+- Avoid medical jargon or provide easy definitions.
+- Include relatable visual analogies.
+
+### 5. Research Context
+- Use DuckDuckGo search to find recent medical literature.
+- Search for standard treatment protocols.
+- Provide 2-3 key references supporting the analysis.
+
+Ensure a structured and medically accurate response using clear markdown formatting.
+"""
+
+def medical_image_analysis_page():
+    """Medical Image Analysis page using Google Gemini 2.5 Pro API."""
+    st.markdown(
+        """
+        <iframe
+        src="https://lucifer7210-multimodal-llm.hf.space"
+        frameborder="0"
+        width="100%"
+        height="1000"
+        ></iframe>
+        """,
+        unsafe_allow_html=True
+    )
+
+
 if __name__ == "__main__":
     # Add startup check to sidebar
     startup_check()
@@ -1020,7 +1095,7 @@ if __name__ == "__main__":
     st.markdown(
         """
         <div style='text-align: center; color: #666; padding: 20px;'>
-            <p><strong>Healthcare Q&A Tool v1.0</strong></p>
+            <p><strong> AI medical Health assistant v1.0</strong></p>
             
         Advancing healthcare research through AI-powered literature analysis
         </div>

@@ -122,3 +122,12 @@ python demo.py
 - **Configurable prompting for medical QA.**
 - **Interactive dashboard and API-based automation.**
 
+## 🖼️ New Feature: Medical Image Analysis
+
+- Integrated a new Medical Image Analysis section in the Streamlit app.
+- Embeds an AI-powered medical image analysis tool using Google Gemini 2.5 Pro API.
+- Allows users to upload medical images (X-ray, MRI, CT, Ultrasound, etc.) for detailed AI-driven analysis.
+- Provides diagnostic assessments, patient-friendly explanations, and research context.
+- Utilizes DuckDuckGo tools for up-to-date medical literature references.
+- Accessible via the "Medical Image Analysis" tab in the main navigation menu.
+

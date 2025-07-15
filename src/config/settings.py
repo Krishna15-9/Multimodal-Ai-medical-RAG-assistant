@@ -16,12 +16,15 @@ load_dotenv()
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     openrouter_api_key: str = Field(..., description="OpenRouter API key")
+    google_gemini_api_key: Optional[str] = Field(None, description="Google Gemini API key")
+    google_api_key: Optional[str] = Field(None, description="Google API key for Gemini model")
     llm_model: str = Field("openai/o4-mini", description="OpenRouter model name")
     
     
     class Config:
         env_file = ".env"
     # Keep all other existing settings (Chroma, PubMed, etc.) unchanged...
+
 
     def get_llm_config(self) -> dict:
         """Updated for OpenRouter"""
